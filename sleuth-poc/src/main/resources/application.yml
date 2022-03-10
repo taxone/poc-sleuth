@@ -1,0 +1,21 @@
+spring:
+  sleuth:
+    reactor:
+      instrumentation-type: decorate-queues
+  application:    name: sleuth-poc
+  cloud:
+    gateway:
+      default-filters:
+        - RewritePath=/apigw(?<segment>/?.*), $\{segment}
+      routes:      - id: myrule
+        uri: https://httpbin.org
+        predicates:
+          - Path=/apigw/get/**  
+logging:
+  level:  
+    reactor.netty.http.client: debug
+    org.springframework.web.reactive.function: debug
+    org.springframework.cloud.gateway: debug
+    gpptrafficIN: debug
+    gpptrafficOUT: debug         
+server:  port: 8081     
